@@ -169,7 +169,7 @@ class App extends React.Component {
                     <span className="profile-user" >
                             <span className="glyphicon glyphicon-user"></span>
                             <br/>
-                            <span> {peer} </span>  
+                            <span> You </span>  
                     </span> 
                 
                     : 
@@ -182,7 +182,7 @@ class App extends React.Component {
                     </div>;
 
                 return (
-                    <div key={id}>
+                    <div className="eachpeer" key={id}>
 
                         {peerIcon}
                         
@@ -193,13 +193,13 @@ class App extends React.Component {
             }.bind(this))
 
         } else {
-            var peersInfo = <span> Getting Info </span>
+            var peersInfo = <span> Getting Peers... </span>
         }
 
 
 
         return (
-            <div>
+            <div className="peersposition">
 
 
                 {peersInfo}

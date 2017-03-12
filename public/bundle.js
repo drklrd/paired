@@ -10349,9 +10349,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         null,
-                        ' ',
-                        peer,
-                        ' '
+                        ' You '
                     )
                 ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
@@ -10374,7 +10372,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
                 return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { key: id },
+                    { className: 'eachpeer', key: id },
                     peerIcon
                 );
             }.bind(this));
@@ -10382,13 +10380,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             var peersInfo = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'span',
                 null,
-                ' Getting Info '
+                ' Getting Peers... '
             );
         }
 
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
-            null,
+            { className: 'peersposition' },
             peersInfo
         );
     }
