@@ -37,6 +37,10 @@ var server = app.listen(8848, function() {
   console.log('LISTENING on port 8848 ')
 });
 
+var ExpressPeerServer = require('peer').ExpressPeerServer;
+
+app.use('/peerjs', ExpressPeerServer(server));
+
 
 var io = require('socket.io')(server);
 

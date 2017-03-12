@@ -30,7 +30,7 @@ class App extends React.Component {
                     id: id,
                     peers: conceredPeers
                 });
-                
+
             }.bind(this))
 
         }.bind(this))
@@ -42,10 +42,10 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
-
-
         var peerObj = new Peer({
-            key: 'o9c6k6w74ebl0udi',
+            host : 'localhost',
+            port : 8848,
+            path : 'peerjs',
             debug: 3,
             logFunction: function() {
                 // console.log(Array.prototype.slice.call(arguments).join(' '));
@@ -62,8 +62,8 @@ class App extends React.Component {
 
 
         peerObj.on('connection', function(conn) {
-            console.log('COneection', conn.peer)
-            console.log('label', conn.label)
+            // console.log('COneection', conn.peer)
+            // console.log('label', conn.label)
             if (conn.label === "chat") {
 
                 conn.on('data', function(data) {
