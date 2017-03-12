@@ -10211,6 +10211,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+const peerColors = ['#1abc9c', '#9b59b6', '#16a085', '#f1c40f', '#9b59b6', '#e74c3c', '#c0392b', '#f39c12', '#c0392b', '#d35400'];
+
+function getColor() {
+
+    return peerColors[Math.floor(Math.random() * peerColors.length)];
+}
+
 class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
     updateId() {
@@ -10221,7 +10228,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
             var room = prompt('Enter p2p Pass Phrase');
 
-            socket.emit('newLogin', id, room);
+            socket.emit('newLogin', id, room, getColor());
 
             socket.on("currentonlineusers", function (onlineusers) {
                 // console.log('current users', onlineusers)
@@ -10355,12 +10362,17 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
             var peersInfo = this.state.peers.map(function (peer, id) {
 
+                var peerColor = peer.split('_')[3];
                 var IP = peer.split('_')[1];
                 peer = peer.split('_')[0];
 
+                var style = {
+                    color: peerColor
+                };
+
                 var peerIcon = this.state.id === peer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'span',
-                    { className: 'profile-user' },
+                    { style: style, className: 'profile-user' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         { className: 'glyphicon glyphicon-user' },
@@ -10387,8 +10399,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     '  ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'label',
-                        { htmlFor: 'file',
-                            className: 'profile' },
+                        { htmlFor: 'file', style: style,
+                            className: 'profile-user' },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'span',
                             { className: 'glyphicon glyphicon-user' },
@@ -10402,7 +10414,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                         null,
                         ' ',
                         peer,
-                        '@ ',
+                        '\xA0 @ ',
                         IP,
                         ' '
                     ),

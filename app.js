@@ -51,11 +51,11 @@ io.on('connection', function(socket) {
   var address = socket.handshake.address;
   console.log('Connected !', address);
 
-  socket.on('newLogin', (user, room) => {
-    if (!users[user + '_' + address + '_' + room]) {
-      users[user + '_' + address + '_' + room] = socket;
+  socket.on('newLogin', (user, room, color) => {
+    if (!users[user + '_' + address + '_' + room + '_' + color]) {
+      users[user + '_' + address + '_' + room + '_' + color] = socket;
     } else {
-      users[user + '_' + address + '_' + room] = socket;
+      users[user + '_' + address + '_' + room + '_' + color] = socket;
     }
     io.emit('currentonlineusers', Object.keys(users))
   });

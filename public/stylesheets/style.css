@@ -12,13 +12,13 @@
     font-size: 1.25em;
     font-weight: 700;
     color: white;
-    background-color: black;
+    /*background-color: black;*/
     display: inline-block;
 }
 
 .inputfile:focus + label,
 .inputfile + label:hover {
-    background-color: red;
+    background-color: dimgrey;
 }
 
 .inputfile + label {
@@ -28,12 +28,13 @@
 .profile{
   border-radius : 25px;
   padding : 10px;
+  font-size: 30px;
 }
 
 .profile-user{
   border-radius : 25px;
   padding : 10px;
-  font-size: 20px;
+  font-size: 30px;
 }
 
 .peersposition{

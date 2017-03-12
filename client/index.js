@@ -2,6 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Axios from 'axios';
 
+const peerColors = [
+    '#1abc9c',
+    '#9b59b6',
+    '#16a085',
+    '#f1c40f',
+    '#9b59b6',
+    '#e74c3c',
+    '#c0392b',
+    '#f39c12',
+    '#c0392b',
+    '#d35400'
+];
+
+function getColor(){
+
+    return peerColors[Math.floor(Math.random() * peerColors.length)];
+
+}
+
 class App extends React.Component {
 
     updateId() {
@@ -14,7 +33,7 @@ class App extends React.Component {
 
             var room = prompt('Enter p2p Pass Phrase')
 
-            socket.emit('newLogin', id, room);
+            socket.emit('newLogin', id, room , getColor() );
 
             socket.on("currentonlineusers", function(onlineusers) {
                 // console.log('current users', onlineusers)
@@ -171,13 +190,17 @@ class App extends React.Component {
 
             var peersInfo = this.state.peers.map(function(peer, id) {
 
+                var peerColor = peer.split('_')[3] ;
                 var IP = peer.split('_')[1];
                 peer = peer.split('_')[0];
 
+                var style = {
+                    color : peerColor
+                }
 
                 var peerIcon = this.state.id === peer ?
 
-                    < span className = "profile-user" >
+                    < span style={style} className = "profile-user" >
                     < span className = "glyphicon glyphicon-user" > < /span> < br / >
                     < span > You < /span>   < /span> 
 
@@ -190,11 +213,12 @@ class App extends React.Component {
                 onChange = {
                     this.sendFile.bind(this, peer)
                 }
-                />  < label htmlFor = "file"
-                className = "profile" >
+                />  < label htmlFor = "file" style={style}
+                className = "profile-user" >
                     < span className = "glyphicon glyphicon-user" > < /span> < /label>  < span > {
-                        peer
+                        peer 
                     }
+                &nbsp;
                 @ {
                     IP
                 } < /span>  < /div>;
