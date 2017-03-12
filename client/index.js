@@ -162,7 +162,9 @@ class App extends React.Component {
 
             var peersInfo = this.state.peers.map(function (peer, id) {
 
+                var IP = peer.split('_')[1];
                 peer = peer.split('_')[0];
+                
 
                 var peerIcon = this.state.id === peer ? 
                 
@@ -178,7 +180,7 @@ class App extends React.Component {
                         <label htmlFor="file" className="profile" >
                             <span className="glyphicon glyphicon-user"></span>
                         </label> 
-                        <span> {peer} </span> 
+                        <span> {peer}  @ {IP} </span> 
                     </div>;
 
                 return (

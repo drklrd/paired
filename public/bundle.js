@@ -10339,6 +10339,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
             var peersInfo = this.state.peers.map(function (peer, id) {
 
+                var IP = peer.split('_')[1];
                 peer = peer.split('_')[0];
 
                 var peerIcon = this.state.id === peer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -10366,6 +10367,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                         null,
                         ' ',
                         peer,
+                        '  @ ',
+                        IP,
                         ' '
                     )
                 );
