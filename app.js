@@ -46,20 +46,15 @@ io.on('connection', function (socket) {
   console.log('Connected !', address);
 
   socket.on('newLogin', (user) => {
-    // console.log('yaya',user);
-    if (!users[user]) {
-      users[user] = socket;
-      // console.log('New user logs in !');
+    if (!users[user + '_' + address]) {
+      users[user + '_' + address] = socket;
     } else {
-      users[user] = socket;
-      // console.log('This user is already in the list ');
+      users[user + '_' + address] = socket;
     }
     io.emit('currentonlineusers', Object.keys(users))
-    // console.log('Current  users : ' + Object.keys(users));
   });
 
   socket.on('disconnect', function () {
-
     for (var user in users) {
       if (users[user] === socket) {
         delete users[user];

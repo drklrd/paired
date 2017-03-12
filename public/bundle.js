@@ -10267,7 +10267,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     var blob = new Blob([data.file], { type: data.filetype });
                     var url = URL.createObjectURL(blob);
                     a.href = url;
-                    a.download = name;
+                    a.download = data.filename;
                     a.click();
 
                     console.log('Received url', url);
@@ -10338,6 +10338,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         if (this.state.id) {
 
             var peersInfo = this.state.peers.map(function (peer, id) {
+
+                peer = peer.split('_')[0];
 
                 var peerIcon = this.state.id === peer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'span',
