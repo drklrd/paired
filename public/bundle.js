@@ -10217,17 +10217,17 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
         this.state.peer.on('open', function (id) {
 
-            this.setState({
-                id: id
-            });
-
             var socket = io();
 
             socket.emit('newLogin', id);
 
             socket.on("currentonlineusers", function (onlineusers) {
                 console.log('current users', onlineusers);
-            });
+                this.setState({
+                    id: id,
+                    peers: onlineusers
+                });
+            }.bind(this));
         }.bind(this));
     }
 
@@ -10243,13 +10243,15 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         });
 
         this.state = {
-            peer: peerObj
+            peer: peerObj,
+            peers: []
         };
 
         this.updateId();
 
         peerObj.on('connection', function (conn) {
             console.log('COneection', conn.peer);
+            console.log('label', conn.label);
             if (conn.label === "chat") {
 
                 conn.on('data', function (data) {
@@ -10258,6 +10260,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             } else if (conn.label === "file") {
 
                 conn.on('data', function (data) {
+                    console.log(data);
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display: none";
@@ -10311,48 +10314,73 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         this.connectTo(this.refs['peerid']);
     }
 
-    sendFile(event) {
+    sendFile(peerid, event) {
+
         console.log(event.target.files);
         var file = event.target.files[0];
         var blob = new Blob(event.target.files, { type: file.type });
 
-        this.state.fileconnection.send({
-            file: blob,
-            filename: file.name,
-            filetype: file.type
+        var fileconnection = this.state.peer.connect(peerid, {
+            label: 'file'
+        });
+
+        fileconnection.on('open', function () {
+            fileconnection.send({
+                file: blob,
+                filename: file.name,
+                filetype: file.type
+            });
         });
     }
 
     render() {
 
-        if (this.state && this.state.id) {
-            var idInfo = this.state.id;
+        if (this.state.id) {
+
+            var peersInfo = this.state.peers.map(function (peer, id) {
+
+                var peerIcon = this.state.id === peer ? 'You' : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'file', id: 'file', className: 'mui--hide', onChange: this.sendFile.bind(this, peer) });
+
+                return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { key: id },
+                    peerIcon,
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        null,
+                        ' ',
+                        peer,
+                        ' '
+                    )
+                );
+            }.bind(this));
         } else {
-            var idInfo = "";
+            var peersInfo = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'span',
+                null,
+                ' Getting Info '
+            );
         }
 
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
             null,
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'span',
-                null,
-                'Your ID is : ',
-                idInfo
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'form',
-                { onSubmit: this.connectWithPeer.bind(this) },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'peerid', type: 'text' }),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'file', id: 'file', className: 'mui--hide', onChange: this.sendFile.bind(this) }),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('button', { type: 'submit' })
-            )
+            peersInfo
         );
     }
 
 }
 
 __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(App, null), document.getElementById('app'));
+
+/*
+ <form onSubmit={this.connectWithPeer.bind(this)}>
+
+                    <input ref="peerid" type="text" />
+                    <input type="file" name="file" id="file" className="mui--hide" onChange={this.sendFile.bind(this)} />
+                    <button type="submit"></button>
+
+                </form>*/
 
 /***/ }),
 /* 88 */
