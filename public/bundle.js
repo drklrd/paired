@@ -10220,6 +10220,14 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             this.setState({
                 id: id
             });
+
+            var socket = io();
+
+            socket.emit('newLogin', id);
+
+            socket.on("currentonlineusers", function (onlineusers) {
+                console.log('current users', onlineusers);
+            });
         }.bind(this));
     }
 

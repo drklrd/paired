@@ -10,6 +10,14 @@ class App extends React.Component {
             
             this.setState({
                 id : id
+            });
+
+            var socket = io();
+
+            socket.emit('newLogin',id);
+
+            socket.on("currentonlineusers",function(onlineusers){
+                console.log('current users',onlineusers)
             })
             
         }.bind(this))
@@ -20,6 +28,8 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
+
+        
 
         var peerObj = new Peer({ 
                 key : 'o9c6k6w74ebl0udi',
@@ -34,6 +44,8 @@ class App extends React.Component {
         };
         
         this.updateId();
+
+        
 
         
 
