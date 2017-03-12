@@ -55,6 +55,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function () {
+    
     for (var user in users) {
       if (users[user] === socket) {
         delete users[user];
