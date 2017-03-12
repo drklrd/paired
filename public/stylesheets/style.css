@@ -1,57 +1,37 @@
-body, html {
-    height: 100%;
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
 
-.parallax {
-    /* The image used */
-    background-image: url('../images/travel.jpg');
 
-    /* Full height */
-    height: 650px;
-
-    /* Create the parallax scrolling effect */
-    background-attachment: fixed;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    background-size: cover;
-    opacity: 0.90;
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
 }
 
-.mid{
-  height:210px;
-  background-color :#000000;
-  opacity: 0.9;
-  font-size:25px;
-  color: #ffffff;
-  padding : 30px;
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
 }
 
-.content{
-
-  padding : 50px;
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
 }
 
-.nice-buttons{
-
-    background-color: #895A1F;
-    color : #ffffff;
-    border : none;
-    padding : 7px;
-    /*opacity: 0.7;*/
-    border-radius: 3px;
-    width : 200px;
-    margin : 5px;
-
+.profile{
+  border-radius : 25px;
+  padding : 10px;
 }
 
-.nice-buttons:hover{
-  background-color: #9E681C;
-}
-
-.nice-font{
-  font-family: 'Sansita', sans-serif;
-}
-
-.tagline{
-  font-size: 18px;
+.profile-user{
+  border-radius : 25px;
+  padding : 10px;
+  font-size: 20px;
 }

@@ -162,13 +162,28 @@ class App extends React.Component {
 
             var peersInfo = this.state.peers.map(function (peer, id) {
 
-                var peerIcon = this.state.id === peer ? 'You' : <input type="file" name="file" id="file" className="mui--hide" onChange={this.sendFile.bind(this, peer)} />;
+                var peerIcon = this.state.id === peer ? 
+                
+                    <span className="profile-user" >
+                            <span className="glyphicon glyphicon-user"></span>
+                            <br/>
+                            <span> {peer} </span>  
+                    </span> 
+                
+                    : 
+
+                    <div> <input type="file" name="file" id="file" className="inputfile" onChange={this.sendFile.bind(this, peer)} /> 
+                        <label htmlFor="file" className="profile" >
+                            <span className="glyphicon glyphicon-user"></span>
+                        </label> 
+                        <span> {peer} </span> 
+                    </div>;
 
                 return (
                     <div key={id}>
 
                         {peerIcon}
-                        <span> {peer} </span>
+                        
 
 
                     </div>

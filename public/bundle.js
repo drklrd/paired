@@ -10339,12 +10339,11 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
             var peersInfo = this.state.peers.map(function (peer, id) {
 
-                var peerIcon = this.state.id === peer ? 'You' : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'file', id: 'file', className: 'mui--hide', onChange: this.sendFile.bind(this, peer) });
-
-                return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { key: id },
-                    peerIcon,
+                var peerIcon = this.state.id === peer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'span',
+                    { className: 'profile-user' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { className: 'glyphicon glyphicon-user' }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         null,
@@ -10352,6 +10351,29 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                         peer,
                         ' '
                     )
+                ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    null,
+                    ' ',
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'file', id: 'file', className: 'inputfile', onChange: this.sendFile.bind(this, peer) }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'label',
+                        { htmlFor: 'file', className: 'profile' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { className: 'glyphicon glyphicon-user' })
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        null,
+                        ' ',
+                        peer,
+                        ' '
+                    )
+                );
+
+                return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { key: id },
+                    peerIcon
                 );
             }.bind(this));
         } else {
