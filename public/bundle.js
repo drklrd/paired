@@ -10219,13 +10219,23 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
             var socket = io();
 
-            socket.emit('newLogin', id);
+            var room = prompt('Enter p2p Pass Phrase');
+
+            socket.emit('newLogin', id, room);
 
             socket.on("currentonlineusers", function (onlineusers) {
-                console.log('current users', onlineusers);
+                // console.log('current users', onlineusers)
+                var conceredPeers = [];
+
+                onlineusers.forEach(function (user) {
+                    if (user.split('_')[2] === room) {
+                        conceredPeers.push(user);
+                    }
+                });
+
                 this.setState({
                     id: id,
-                    peers: onlineusers
+                    peers: conceredPeers
                 });
             }.bind(this));
         }.bind(this));
@@ -10264,7 +10274,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display: none";
-                    var blob = new Blob([data.file], { type: data.filetype });
+                    var blob = new Blob([data.file], {
+                        type: data.filetype
+                    });
                     var url = URL.createObjectURL(blob);
                     a.href = url;
                     a.download = data.filename;
@@ -10318,7 +10330,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
         console.log(event.target.files);
         var file = event.target.files[0];
-        var blob = new Blob(event.target.files, { type: file.type });
+        var blob = new Blob(event.target.files, {
+            type: file.type
+        });
 
         var fileconnection = this.state.peer.connect(peerid, {
             label: 'file'
@@ -10345,37 +10359,58 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                 var peerIcon = this.state.id === peer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'span',
                     { className: 'profile-user' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { className: 'glyphicon glyphicon-user' }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        { className: 'glyphicon glyphicon-user' },
+                        ' '
+                    ),
+                    ' ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         null,
                         ' You '
-                    )
+                    ),
+                    '   '
                 ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     null,
                     ' ',
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'file', id: 'file', className: 'inputfile', onChange: this.sendFile.bind(this, peer) }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file',
+                        name: 'file',
+                        id: 'file',
+                        className: 'inputfile',
+                        onChange: this.sendFile.bind(this, peer)
+                    }),
+                    '  ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'label',
-                        { htmlFor: 'file', className: 'profile' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { className: 'glyphicon glyphicon-user' })
+                        { htmlFor: 'file',
+                            className: 'profile' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'glyphicon glyphicon-user' },
+                            ' '
+                        ),
+                        ' '
                     ),
+                    '  ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         null,
                         ' ',
                         peer,
-                        '  @ ',
+                        '@ ',
                         IP,
                         ' '
-                    )
+                    ),
+                    '  '
                 );
 
                 return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'eachpeer', key: id },
+                    { className: 'eachpeer',
+                        key: id },
                     peerIcon
                 );
             }.bind(this));

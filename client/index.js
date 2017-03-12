@@ -6,20 +6,31 @@ class App extends React.Component {
 
     updateId() {
 
-        this.state.peer.on('open', function (id) {
+        this.state.peer.on('open', function(id) {
 
 
 
             var socket = io();
 
-            socket.emit('newLogin', id);
+            var room = prompt('Enter p2p Pass Phrase')
 
-            socket.on("currentonlineusers", function (onlineusers) {
-                console.log('current users', onlineusers)
+            socket.emit('newLogin', id, room);
+
+            socket.on("currentonlineusers", function(onlineusers) {
+                // console.log('current users', onlineusers)
+                var conceredPeers = [];
+
+                onlineusers.forEach(function(user) {
+                    if (user.split('_')[2] === room) {
+                        conceredPeers.push(user);
+                    }
+                })
+
                 this.setState({
                     id: id,
-                    peers: onlineusers
+                    peers: conceredPeers
                 });
+                
             }.bind(this))
 
         }.bind(this))
@@ -36,7 +47,7 @@ class App extends React.Component {
         var peerObj = new Peer({
             key: 'o9c6k6w74ebl0udi',
             debug: 3,
-            logFunction: function () {
+            logFunction: function() {
                 // console.log(Array.prototype.slice.call(arguments).join(' '));
             }
         });
@@ -50,30 +61,26 @@ class App extends React.Component {
 
 
 
-
-
-
-
-
-
-        peerObj.on('connection', function (conn) {
+        peerObj.on('connection', function(conn) {
             console.log('COneection', conn.peer)
             console.log('label', conn.label)
             if (conn.label === "chat") {
 
-                conn.on('data', function (data) {
+                conn.on('data', function(data) {
                     console.log('Received Message', data);
                 });
 
 
             } else if (conn.label === "file") {
 
-                conn.on('data', function (data) {
+                conn.on('data', function(data) {
                     console.log(data)
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display: none";
-                    var blob = new Blob([data.file], { type: data.filetype });
+                    var blob = new Blob([data.file], {
+                        type: data.filetype
+                    });
                     var url = URL.createObjectURL(blob);
                     a.href = url;
                     a.download = data.filename;
@@ -118,7 +125,7 @@ class App extends React.Component {
             fileconnection: fileconnection
         })
 
-        connection.on('open', function () {
+        connection.on('open', function() {
             connection.send("Hello")
         })
 
@@ -136,13 +143,15 @@ class App extends React.Component {
 
         console.log(event.target.files);
         var file = event.target.files[0];
-        var blob = new Blob(event.target.files, { type: file.type });
+        var blob = new Blob(event.target.files, {
+            type: file.type
+        });
 
         var fileconnection = this.state.peer.connect(peerid, {
             label: 'file'
         });
 
-        fileconnection.on('open', function () {
+        fileconnection.on('open', function() {
             fileconnection.send({
                 file: blob,
                 filename: file.name,
@@ -160,63 +169,74 @@ class App extends React.Component {
 
         if (this.state.id) {
 
-            var peersInfo = this.state.peers.map(function (peer, id) {
+            var peersInfo = this.state.peers.map(function(peer, id) {
 
                 var IP = peer.split('_')[1];
                 peer = peer.split('_')[0];
-                
-
-                var peerIcon = this.state.id === peer ? 
-                
-                    <span className="profile-user" >
-                            <span className="glyphicon glyphicon-user"></span>
-                            <br/>
-                            <span> You </span>  
-                    </span> 
-                
-                    : 
-
-                    <div> <input type="file" name="file" id="file" className="inputfile" onChange={this.sendFile.bind(this, peer)} /> 
-                        <label htmlFor="file" className="profile" >
-                            <span className="glyphicon glyphicon-user"></span>
-                        </label> 
-                        <span> {peer}  @ {IP} </span> 
-                    </div>;
-
-                return (
-                    <div className="eachpeer" key={id}>
-
-                        {peerIcon}
-                        
 
 
-                    </div>
+                var peerIcon = this.state.id === peer ?
+
+                    < span className = "profile-user" >
+                    < span className = "glyphicon glyphicon-user" > < /span> < br / >
+                    < span > You < /span>   < /span> 
+
+                :
+
+                < div > < input type = "file"
+                name = "file"
+                id = "file"
+                className = "inputfile"
+                onChange = {
+                    this.sendFile.bind(this, peer)
+                }
+                />  < label htmlFor = "file"
+                className = "profile" >
+                    < span className = "glyphicon glyphicon-user" > < /span> < /label>  < span > {
+                        peer
+                    }
+                @ {
+                    IP
+                } < /span>  < /div>;
+
+                return ( < div className = "eachpeer"
+                    key = {
+                        id
+                    } >
+
+                    {
+                        peerIcon
+                    }
+
+
+
+                    < /div>
                 )
             }.bind(this))
 
         } else {
-            var peersInfo = <span> Getting Peers... </span>
+            var peersInfo = < span > Getting Peers... < /span>
         }
 
 
 
-        return (
-            <div className="peersposition">
+        return ( < div className = "peersposition" >
 
 
-                {peersInfo}
+            {
+                peersInfo
+            }
 
 
 
-
-            </div>
+            < /div>
 
         )
     }
 
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render( < App / > , document.getElementById('app'));
 
 /*
  <form onSubmit={this.connectWithPeer.bind(this)}>
