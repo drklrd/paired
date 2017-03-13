@@ -10252,9 +10252,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         super(props);
 
         var peerObj = new Peer({
-            host: 'localhost',
-            port: 8848,
-            path: 'peerjs',
+            key: 'o9c6k6w74ebl0udi',
             debug: 3,
             logFunction: function () {
                 // console.log(Array.prototype.slice.call(arguments).join(' '));
