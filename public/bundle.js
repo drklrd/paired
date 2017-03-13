@@ -10226,26 +10226,53 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
             var socket = io();
 
-            var room = prompt('Enter p2p Pass Phrase');
+            swal({
+                title: "Enter p2p Pass Phrase",
+                text: "You need to enter a pass phrase for this",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                animation: "slide-from-top",
+                inputPlaceholder: "Pass phrase"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
 
-            socket.emit('newLogin', id, room, getColor());
+                if (inputValue === "") {
+                    swal.showInputError("You need to provide a pass phrase");
+                    return false;
+                }
 
-            socket.on("currentonlineusers", function (onlineusers) {
-                // console.log('current users', onlineusers)
-                var conceredPeers = [];
+                var room = inputValue;
 
-                onlineusers.forEach(function (user) {
-                    if (user.split('_')[2] === room) {
-                        conceredPeers.push(user);
-                    }
-                });
+                swal.close();
 
-                this.setState({
-                    id: id,
-                    peers: conceredPeers
-                });
+                socket.emit('newLogin', id, room, getColor());
+
+                socket.on("currentonlineusers", function (onlineusers) {
+                    // console.log('current users', onlineusers)
+                    var conceredPeers = [];
+
+                    onlineusers.forEach(function (user) {
+                        if (user.split('_')[2] === room) {
+                            conceredPeers.push(user);
+                        }
+                    });
+
+                    this.setState({
+                        id: id,
+                        peers: conceredPeers
+                    });
+                }.bind(this));
             }.bind(this));
         }.bind(this));
+    }
+
+    updateAlertState(peer) {
+
+        this.setState({
+            alertMessage: true,
+            messageText: peer + ' has sent you a file.'
+        });
     }
 
     constructor(props) {
@@ -10266,8 +10293,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
         this.updateId();
 
+        var context = this;
+
         peerObj.on('connection', function (conn) {
-            // console.log('COneection', conn.peer)
+            //console.log('COneection', conn.peer)
             // console.log('label', conn.label)
             if (conn.label === "chat") {
 
@@ -10278,6 +10307,9 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
                 conn.on('data', function (data) {
                     console.log(data);
+
+                    context.updateAlertState(conn.peer);
+
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display: none";
@@ -10369,54 +10401,50 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                 };
 
                 var peerIcon = this.state.id === peer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'span',
-                    { style: style, className: 'profile-user' },
+                    'div',
+                    { style: style },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
-                        { className: 'glyphicon glyphicon-user' },
+                        { className: 'glyphicon glyphicon-user profile-user' },
                         ' '
                     ),
-                    ' ',
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         null,
-                        ' You '
+                        ' [You]   '
                     ),
-                    '   '
-                ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    null,
-                    ' ',
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file',
-                        name: 'file',
-                        id: 'file',
-                        className: 'inputfile',
-                        onChange: this.sendFile.bind(this, peer)
-                    }),
-                    '  ',
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'label',
-                        { htmlFor: 'file', style: style,
-                            className: 'profile-user' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'span',
-                            { className: 'glyphicon glyphicon-user' },
-                            ' '
-                        ),
-                        ' '
-                    ),
-                    '  ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'span',
                         null,
                         ' ',
                         peer,
-                        '\xA0 @ ',
+                        '   \xA0   @ ',
+                        IP,
+                        '  '
+                    )
+                ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    null,
+                    ' ',
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'file', id: 'file', className: 'inputfile', onChange: this.sendFile.bind(this, peer) }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'label',
+                        { htmlFor: 'file', style: style },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'glyphicon glyphicon-user profile-user' },
+                            ' '
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        null,
+                        ' ',
+                        peer,
+                        '   \xA0   @ ',
                         IP,
                         ' '
-                    ),
-                    '  '
+                    )
                 );
 
                 return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -10428,16 +10456,37 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             }.bind(this));
         } else {
             var peersInfo = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'span',
+                'div',
                 null,
                 ' Getting Peers... '
             );
         }
 
+        if (this.state.alertMessage) {
+            var alertMessage = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'alert alert-success' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'strong',
+                    null,
+                    ' ',
+                    this.state.messageText,
+                    ' '
+                )
+            );
+        } else {
+            var alertMessage = "";
+        }
+
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
-            { className: 'peersposition' },
-            peersInfo
+            null,
+            alertMessage,
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'peersposition' },
+                peersInfo
+            )
         );
     }
 

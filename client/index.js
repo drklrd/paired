@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Axios from 'axios';
 
+
 const peerColors = [
     '#1abc9c',
     '#9b59b6',
@@ -31,28 +32,61 @@ class App extends React.Component {
 
             var socket = io();
 
-            var room = prompt('Enter p2p Pass Phrase')
+            swal({
+                    title: "Enter p2p Pass Phrase",
+                    text: "You need to enter a pass phrase for this",
+                    type: "input",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    animation: "slide-from-top",
+                    inputPlaceholder: "Pass phrase"
+                },
+                function(inputValue){
+                    if (inputValue === false) return false;
 
-            socket.emit('newLogin', id, room , getColor() );
-
-            socket.on("currentonlineusers", function(onlineusers) {
-                // console.log('current users', onlineusers)
-                var conceredPeers = [];
-
-                onlineusers.forEach(function(user) {
-                    if (user.split('_')[2] === room) {
-                        conceredPeers.push(user);
+                    if (inputValue === "") {
+                        swal.showInputError("You need to provide a pass phrase");
+                        return false
                     }
-                })
 
-                this.setState({
-                    id: id,
-                    peers: conceredPeers
-                });
+                    var room = inputValue;
 
-            }.bind(this))
+                    swal.close();
+
+                    socket.emit('newLogin', id, room , getColor() );
+
+                    socket.on("currentonlineusers", function(onlineusers) {
+                        // console.log('current users', onlineusers)
+                        var conceredPeers = [];
+
+                        onlineusers.forEach(function(user) {
+                            if (user.split('_')[2] === room) {
+                                conceredPeers.push(user);
+                            }
+                        })
+
+                        this.setState({
+                            id: id,
+                            peers: conceredPeers
+                        });
+
+                    }.bind(this))
+
+                }.bind(this));
+
+
+
 
         }.bind(this))
+
+    }
+
+    updateAlertState(peer){
+
+        this.setState({
+            alertMessage : true,
+            messageText : peer + ' has sent you a file.'
+        })
 
     }
 
@@ -76,10 +110,10 @@ class App extends React.Component {
 
         this.updateId();
 
-
+        var context = this;
 
         peerObj.on('connection', function(conn) {
-            // console.log('COneection', conn.peer)
+             //console.log('COneection', conn.peer)
             // console.log('label', conn.label)
             if (conn.label === "chat") {
 
@@ -92,6 +126,9 @@ class App extends React.Component {
 
                 conn.on('data', function(data) {
                     console.log(data)
+
+                    context.updateAlertState(conn.peer);
+
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display: none";
@@ -198,28 +235,21 @@ class App extends React.Component {
 
                 var peerIcon = this.state.id === peer ?
 
-                    < span style={style} className = "profile-user" >
-                    < span className = "glyphicon glyphicon-user" > < /span> < br / >
-                    < span > You < /span>   < /span> 
+                    < div style={style}>
+                        < span className = "glyphicon glyphicon-user profile-user" > < /span>
+                        < span > [You]   < /span>
+                        < span > { peer  }   &nbsp;   @ { IP}  < /span>
+
+                    < /div>
 
                 :
 
-                < div > < input type = "file"
-                name = "file"
-                id = "file"
-                className = "inputfile"
-                onChange = {
-                    this.sendFile.bind(this, peer)
-                }
-                />  < label htmlFor = "file" style={style}
-                className = "profile-user" >
-                    < span className = "glyphicon glyphicon-user" > < /span> < /label>  < span > {
-                        peer 
-                    }
-                &nbsp;
-                @ {
-                    IP
-                } < /span>  < /div>;
+                < div > < input type = "file" name = "file"   id = "file"    className = "inputfile"  onChange = { this.sendFile.bind(this, peer) } />
+                    < label htmlFor = "file" style={style} >
+                        < span className = "glyphicon glyphicon-user profile-user" > < /span>
+                    < /label>
+                    < span > { peer  }   &nbsp;   @ {       IP   } < /span>
+                < /div>;
 
                 return ( < div className = "eachpeer"
                     key = {
@@ -237,19 +267,31 @@ class App extends React.Component {
             }.bind(this))
 
         } else {
-            var peersInfo = < span > Getting Peers... < /span>
+            var peersInfo = < div   > Getting Peers... < /div>
+        }
+
+        if(this.state.alertMessage){
+            var alertMessage = <div className="alert alert-success">
+                <strong> {this.state.messageText} </strong>
+            </div>
+        }else{
+            var alertMessage = "";
         }
 
 
 
-        return ( < div className = "peersposition" >
+        return ( < div >
+
+            {alertMessage}
+
+            <div className = "peersposition">
 
 
-            {
-                peersInfo
-            }
+                {
+                    peersInfo
+                }
 
-
+            </div>
 
             < /div>
 

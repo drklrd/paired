@@ -18,30 +18,36 @@
 
 .inputfile:focus + label,
 .inputfile + label:hover {
-    background-color: dimgrey;
+    background-color: lightgrey;
+    color : white;
 }
 
 .inputfile + label {
 	cursor: pointer; /* "hand" cursor */
 }
 
-.profile{
-  border-radius : 25px;
-  padding : 10px;
-  font-size: 30px;
-}
+/*.profile{*/
+  /*border-radius : 25px;*/
+  /*padding : 10px;*/
+  /*font-size: 30px;*/
+/*}*/
 
 .profile-user{
-  border-radius : 25px;
-  padding : 10px;
-  font-size: 30px;
+    border-radius : 25px;
+    padding : 10px;
+    font-size: 30px;
+    margin : 20px;
+    border : 1px solid black;
 }
 
 .peersposition{
-  margin-top:40%;
-  margin-left:50%;
+    margin-top:10%;
+    margin-left:40%;
+    font-size: 30px;
+    color : dimgray;
+
 }
 
-.eachpeer{
-  margin : 20px;
-}
+/*.eachpeer{*/
+  /*margin : 20px;*/
+/*}*/
