@@ -10467,7 +10467,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
             var peersInfo = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
-                ' Getting Peers... '
+                ' Preparing . . . '
             );
         }
 

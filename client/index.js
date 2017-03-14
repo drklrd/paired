@@ -280,7 +280,7 @@ class App extends React.Component {
             }.bind(this))
 
         } else {
-            var peersInfo = < div   > Getting Peers... < /div>
+            var peersInfo = < div   > Preparing . . . < /div>
         }
 
         if(this.state.alertMessage){
