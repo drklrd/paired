@@ -124,24 +124,37 @@ class App extends React.Component {
 
             } else if (conn.label === "file") {
 
-                conn.on('data', function(data) {
-                    console.log(data)
+                conn.on("open",function(){
 
-                    context.updateAlertState(conn.peer);
+                    var transferOk = confirm(conn.peer + " wants to send you a file. Do you want to accept ?");
 
-                    var a = document.createElement("a");
-                    document.body.appendChild(a);
-                    a.style = "display: none";
-                    var blob = new Blob([data.file], {
-                        type: data.filetype
-                    });
-                    var url = URL.createObjectURL(blob);
-                    a.href = url;
-                    a.download = data.filename;
-                    a.click();
+                    if(transferOk){
+                        conn.on('data', function(data) {
+                            console.log(data)
 
-                    console.log('Received url', url)
+                            context.updateAlertState(conn.peer);
+
+                            var a = document.createElement("a");
+                            document.body.appendChild(a);
+                            a.style = "display: none";
+                            var blob = new Blob([data.file], {
+                                type: data.filetype
+                            });
+                            var url = URL.createObjectURL(blob);
+                            a.href = url;
+                            a.download = data.filename;
+                            a.click();
+
+                            console.log('Received url', url)
+                        });
+                    }else{
+                        conn.close();
+                    }
+
+
                 });
+
+
 
             }
 
