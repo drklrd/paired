@@ -10267,11 +10267,11 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
         }.bind(this));
     }
 
-    updateAlertState(peer) {
+    updateAlertState(peer, filename) {
 
         this.setState({
             alertMessage: true,
-            messageText: peer + ' has sent you a file.'
+            messageText: peer + ' has sent you a file - ' + filename
         });
     }
 
@@ -10313,7 +10313,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                         conn.on('data', function (data) {
                             console.log(data);
 
-                            context.updateAlertState(conn.peer);
+                            context.updateAlertState(conn.peer, data.filename);
 
                             var a = document.createElement("a");
                             document.body.appendChild(a);

@@ -18,7 +18,7 @@
 
 .inputfile:focus + label,
 .inputfile + label:hover {
-    background-color: lightgrey;
+    /*background-color: lightgrey;*/
     color : white;
 }
 
@@ -37,7 +37,10 @@
     padding : 10px;
     font-size: 30px;
     margin : 20px;
-    border : 1px solid black;
+    border : 2px dotted black;
+    -webkit-transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
+    transition: width 2s, height 2s, background-color 2s, transform 2s;
+
 }
 
 .peersposition{
@@ -46,6 +49,12 @@
     font-size: 30px;
     color : dimgray;
 
+
+}
+
+.profile-user:hover{
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
 }
 
 /*.eachpeer{*/
